@@ -1,141 +1,121 @@
-// 👇 Replace with your real Google Sheet ID
-const PUBLIC_SHEET_ID = '2PACX-1vTP8awohbDH5EJBxJeHzsymKCqyYRSvSzIR-1GgTXNdjibDS4O_DWG8bMmsyIjhva08o97OY77dAraG';
+// Use OpenSheet to fetch data from Google Sheets
+const PUBLIC_SHEET_ID = "2PACX-1vTP8awohbDH5EJBxJeHzsymKCqyYRSvSzIR-1GgTXNdjibDS4O_DWG8bMmsyIjhva08o97OY77dAraG";
 
 let allServices = [];
 let allSales = [];
 let allProperties = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-  Tabletop.init({
-    key: PUBLIC_SHEET_ID,
-    callback: loadData,
-    simpleSheet: false
-  });
-
+  loadData();
   document.getElementById("sale-form").addEventListener("submit", handleSaleUpload);
   document.getElementById("searchInput").addEventListener("input", handleSearch);
 });
 
-function loadData(data) {
-  const services = data["Services"]?.elements || [];
-  const sales = data["Things for Sale"]?.elements || [];
-  const properties = data["Properties"]?.elements || [];
+async function loadData() {
+  try {
+    const services = await fetch(`https://opensheet.elk.sh/${PUBLIC_SHEET_ID}/Services`).then(r => r.json());
+    const sales = await fetch(`https://opensheet.elk.sh/${PUBLIC_SHEET_ID}/Things for Sale`).then(r => r.json());
+    const properties = await fetch(`https://opensheet.elk.sh/${PUBLIC_SHEET_ID}/Properties`).then(r => r.json());
 
-  allServices = services;
-  allSales = sales;
-  allProperties = properties;
+    allServices = services;
+    allSales = sales;
+    allProperties = properties;
 
-  renderServices(services);
-  renderSales(sales);
-  renderProperties(properties);
+    renderServices(services);
+    renderSales(sales);
+    renderProperties(properties);
+  } catch (err) {
+    console.error("Error loading data from Google Sheets:", err);
+  }
 }
 
-function renderServices(data) {
-  const c = document.getElementById("services-container");
-  c.innerHTML = "";
-  data.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "card";
-    let imgs = "";
-    for (let i = 1; i <= 5; i++) {
-      const url = s[`Photo${i}`];
-      if (url) imgs += `<img src="${url}" alt="Foto ${i} de ${s.Name}">`;
-    }
-    card.innerHTML = `
-      <h3>${s.Name}</h3>
-      ${imgs ? `<div class="photos">${imgs}</div>` : ""}
-      <p><strong>Categoría:</strong> ${s.Category}</p>
-      <p><strong>Tel:</strong> ${s.Phone}</p>
-      <p><strong>Email:</strong> ${s.Email}</p>
-      ${s.Website ? `<p><a href="${s.Website}" target="_blank">Sitio Web</a></p>` : ""}
-      <p><strong>Recomendación:</strong> ${s.Recommendation}</p>
-      <p><strong>Calidad:</strong> ${"★".repeat(s.Rating)}${"☆".repeat(5 - s.Rating)}</p>
+function renderServices(services) {
+  const list = document.getElementById("services-list");
+  list.innerHTML = "";
+  services.forEach(service => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${service.Name || ""}</h3>
+      <p><strong>Phone:</strong> ${service.Phone || ""}</p>
+      <p><strong>Email:</strong> ${service.Email || ""}</p>
+      <p><strong>Website:</strong> <a href="${service.Website || "#"}" target="_blank">${service.Website || ""}</a></p>
+      <p>${service.Description || ""}</p>
+      <p>⭐ ${"★".repeat(parseInt(service.Stars || 0))}</p>
+      ${service.Photo ? `<img src="${service.Photo}" alt="Service photo">` : ""}
     `;
-    c.appendChild(card);
+    list.appendChild(div);
   });
 }
 
-function renderSales(data) {
-  const c = document.getElementById("sale-gallery");
-  c.innerHTML = "";
-  data.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "card";
-    let imgs = "";
-    for (let i = 1; i <= 5; i++) {
-      const url = s[`Photo${i}`];
-      if (url) imgs += `<img src="${url}" alt="Foto ${i}">`;
-    }
-    card.innerHTML = `
-      <h3>${s.Description}</h3>
-      <p><strong>Categoría:</strong> ${s.Category}</p>
-      <p><strong>Precio:</strong> ${s.Price} ${s.Currency}</p>
-      ${imgs ? `<div class="photos">${imgs}</div>` : ""}
+function renderSales(sales) {
+  const list = document.getElementById("sales-list");
+  list.innerHTML = "";
+  sales.forEach(item => {
+    const photos = item.Photos ? item.Photos.split(",").map(p => `<img src="${p.trim()}" alt="Item photo">`).join("") : "";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${item.Title || ""}</h3>
+      <p>${item.Description || ""}</p>
+      <p><strong>Price:</strong> ${item.Price || ""}</p>
+      ${photos}
     `;
-    c.appendChild(card);
+    list.appendChild(div);
   });
 }
 
-function renderProperties(data) {
-  const c = document.getElementById("properties-container");
-  c.innerHTML = "";
-  data.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "card";
-    let imgs = "";
-    for (let i = 1; i <= 5; i++) {
-      const u = p[`Photo${i}`];
-      if (u) imgs += `<img src="${u}" alt="Foto ${i} de ${p.Name}">`;
-    }
-    card.innerHTML = `
-      <h3>${p.Name} – ${p.Action}</h3>
-      <p><strong>Tipo:</strong> ${p.Type}</p>
-      <p><strong>Área:</strong> ${p.SquareMeters} m²</p>
-      <p><strong>Años:</strong> ${p.YearsOld}</p>
-      <p><strong>Tel:</strong> ${p.ContactPhone}</p>
-      <p><strong>Precio:</strong> ${p.Price} ${p.Currency}</p>
-      <p><strong>Descripción:</strong> ${p.Description}</p>
-      ${imgs ? `<div class="photos">${imgs}</div>` : ""}
+function renderProperties(properties) {
+  const list = document.getElementById("properties-list");
+  list.innerHTML = "";
+  properties.forEach(property => {
+    const photos = property.Photos ? property.Photos.split(",").map(p => `<img src="${p.trim()}" alt="Property photo">`).join("") : "";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${property.Title || ""}</h3>
+      <p><strong>Type:</strong> ${property.Type || ""}</p>
+      <p><strong>Square meters:</strong> ${property.SquareMeters || ""}</p>
+      <p><strong>Years old:</strong> ${property.YearsOld || ""}</p>
+      <p><strong>Phone:</strong> ${property.Phone || ""}</p>
+      <p>${property.Description || ""}</p>
+      ${photos}
     `;
-    c.appendChild(card);
+    list.appendChild(div);
   });
 }
 
-function handleSaleUpload(e) {
-  e.preventDefault();
-  const form = e.target;
-  const desc = form.querySelector('input[type="text"]').value;
-  const files = form.querySelector('input[type="file"]').files;
-  const gallery = document.getElementById("sale-gallery");
+// Simple admin-only demo form (local only)
+function handleSaleUpload(event) {
+  event.preventDefault();
+  const title = document.getElementById("sale-title").value;
+  const description = document.getElementById("sale-description").value;
+  const price = document.getElementById("sale-price").value;
+  const photosInput = document.getElementById("sale-photos").files;
 
-  Array.from(files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `<p>${desc}</p><img src="${reader.result}" style="width:100%;">`;
-      gallery.appendChild(card);
-    };
-    reader.readAsDataURL(file);
-  });
+  let photoURLs = [];
+  for (let file of photosInput) {
+    photoURLs.push(URL.createObjectURL(file));
+  }
 
-  form.reset();
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <h3>${title}</h3>
+    <p>${description}</p>
+    <p><strong>Price:</strong> ${price}</p>
+    ${photoURLs.map(url => `<img src="${url}" alt="Uploaded photo">`).join("")}
+  `;
+  document.getElementById("sales-list").appendChild(div);
+
+  event.target.reset();
 }
 
-function handleSearch(e) {
-  const term = e.target.value.toLowerCase();
+function handleSearch(event) {
+  const term = event.target.value.toLowerCase();
   const filtered = allServices.filter(s =>
-    s.Name.toLowerCase().includes(term) || s.Category.toLowerCase().includes(term)
+    (s.Name || "").toLowerCase().includes(term) ||
+    (s.Description || "").toLowerCase().includes(term)
   );
   renderServices(filtered);
-}
-
-function validateAdmin() {
-  const password = document.getElementById("admin-pass").value;
-  if (password === "admin123") {
-    document.getElementById("sale-form").style.display = "block";
-    document.getElementById("admin-login").style.display = "none";
-  } else {
-    alert("Contraseña incorrecta.");
-  }
 }
