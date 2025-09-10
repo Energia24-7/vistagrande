@@ -1,5 +1,5 @@
 // Use OpenSheet to fetch data from Google Sheets
-const PUBLIC_SHEET_ID = "2PACX-1vTP8awohbDH5EJBxJeHzsymKCqyYRSvSzIR-1GgTXNdjibDS4O_DWG8bMmsyIjhva08o97OY77dAraG";
+const PUBLIC_SHEET_ID = "1DV7UAvEBayDyx8j7pUwCjaUIqiNx0vl9GhyBfo6YKps";
 
 let allServices = [];
 let allSales = [];
