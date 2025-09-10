@@ -1,65 +1,66 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Urbanización Vista Grande - Servicios</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://unpkg.com/tabletop@1.6.0/src/tabletop.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <h1>Urbanización Vista Grande - Servicios</h1>
+    <input type="text" id="searchInput" placeholder="Buscar servicios...">
   </header>
 
   <div class="container">
-    <nav class="sidebar">
+    <!-- Sidebar -->
+    <aside>
+      <h2>Categorías</h2>
       <ul>
-        <li><a href="#services-section">Servicios</a></li>
-        <li><a href="#things-sale">Clasificados</a></li>
+        <li><a href="#services">Servicios</a></li>
+        <li><a href="#sales">Cosas en Venta</a></li>
         <li><a href="#properties">Propiedades</a></li>
       </ul>
-    </nav>
+      <div class="ads">
+        <h3>Publicidad</h3>
+        <img src="https://via.placeholder.com/150x100" alt="Ad 1">
+        <img src="https://via.placeholder.com/150x100" alt="Ad 2">
+      </div>
+    </aside>
 
+    <!-- Main Content -->
     <main>
-      <section id="search-section">
-        <input type="text" id="searchInput" placeholder="Buscar servicios...">
+      <section id="services">
+        <h2>Servicios</h2>
+        <div id="services-list"></div>
       </section>
 
-      <section id="services-section">
-        <h2>Servicios disponibles</h2>
-        <div id="services-container"></div>
-      </section>
+      <section id="sales">
+        <h2>Cosas en Venta</h2>
+        <div id="sales-list"></div>
 
-      <section id="things-sale">
-        <h2>Clasificados: Artículos en venta</h2>
-        <div id="sale-gallery"></div>
-
-        <div id="admin-login">
-          <input type="password" id="admin-pass" placeholder="Contraseña de administrador">
-          <button onclick="validateAdmin()">Entrar</button>
-        </div>
-
-        <form id="sale-form" style="display:none;">
-          <input type="text" placeholder="Descripción" required />
-          <input type="file" accept="image/*" multiple required />
+        <!-- Admin Upload Form -->
+        <h3>Agregar un artículo (solo admin)</h3>
+        <form id="sale-form">
+          <input type="text" id="sale-title" placeholder="Título" required>
+          <textarea id="sale-description" placeholder="Descripción" required></textarea>
+          <input type="text" id="sale-price" placeholder="Precio" required>
+          <input type="file" id="sale-photos" accept="image/*" multiple>
           <button type="submit">Subir</button>
         </form>
       </section>
 
       <section id="properties">
-        <h2>Propiedades en venta/alquiler</h2>
-        <div id="properties-container"></div>
+        <h2>Propiedades en Venta o Alquiler</h2>
+        <div id="properties-list"></div>
       </section>
-
-      <footer>
-        <p>Contacto: vista@example.com</p>
-        <p>© 2025 Urbanización Vista Grande</p>
-      </footer>
     </main>
   </div>
+
+  <footer>
+    <p>Urbanización Vista Grande - Contacto: info@vistagrande.com</p>
+    <p>Desarrollado para la comunidad</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
