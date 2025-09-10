@@ -1,19 +1,14 @@
-const PUBLIC_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTP8awohbDH5EJBxJeHzsymKCqyYRSvSzIR-1GgTXNdjibDS4O_DWG8bMmsyIjhva08o97OY77dAraG/pubhtml';
-
-let allServices = [];
-
-let allSales = [];
-
-let allProperties = [];
+const PUBLIC_SHEET_ID = '2PACX-1vTP8awohbDH5EJBxJeHzsymKCqyYRSvSzIR-1GgTXNdjibDS4O_DWG8bMmsyIjhva08o97OY77dAraG';
 
 document.addEventListener("DOMContentLoaded", () => {
-
-  Tabletop.init({ key: PUBLIC_SHEET_URL, callback: loadData, simpleSheet: false });
-
+  Tabletop.init({
+    key: PUBLIC_SHEET_ID,
+    callback: loadData,
+    simpleSheet: false
+  });
   document.getElementById("sale-form").addEventListener("submit", handleSaleUpload);
-
   document.getElementById("searchInput").addEventListener("input", handleSearch);
-
+});
 });
 
 function loadData(data) {
