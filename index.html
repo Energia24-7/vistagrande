@@ -1,109 +1,65 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <title>Urbanización Vista Grande - Servicios</title>
-
   <link rel="stylesheet" href="styles.css" />
-
   <script src="https://unpkg.com/tabletop@1.6.0/src/tabletop.min.js"></script>
-
 </head>
-
 <body>
-
   <header>
-
     <h1>Urbanización Vista Grande - Servicios</h1>
-
   </header>
 
   <div class="container">
-
     <nav class="sidebar">
-
       <ul>
-
         <li><a href="#services-section">Servicios</a></li>
-
         <li><a href="#things-sale">Clasificados</a></li>
-
         <li><a href="#properties">Propiedades</a></li>
-
       </ul>
-
     </nav>
 
     <main>
-
       <section id="search-section">
-
         <input type="text" id="searchInput" placeholder="Buscar servicios...">
-
       </section>
 
       <section id="services-section">
-
         <h2>Servicios disponibles</h2>
-
         <div id="services-container"></div>
-
       </section>
 
       <section id="things-sale">
-
         <h2>Clasificados: Artículos en venta</h2>
-
         <div id="sale-gallery"></div>
 
         <div id="admin-login">
-
           <input type="password" id="admin-pass" placeholder="Contraseña de administrador">
-
           <button onclick="validateAdmin()">Entrar</button>
-
         </div>
 
         <form id="sale-form" style="display:none;">
-
           <input type="text" placeholder="Descripción" required />
-
           <input type="file" accept="image/*" multiple required />
-
           <button type="submit">Subir</button>
-
         </form>
-
       </section>
 
       <section id="properties">
-
         <h2>Propiedades en venta/alquiler</h2>
-
         <div id="properties-container"></div>
-
       </section>
 
       <footer>
-
         <p>Contacto: vista@example.com</p>
-
         <p>© 2025 Urbanización Vista Grande</p>
-
       </footer>
-
     </main>
-
   </div>
 
   <script src="script.js"></script>
-
 </body>
-
 </html>
+
